@@ -23,7 +23,7 @@ function AddEmployee() {
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
-        axios.get(`${API_BASE}/departments`).then((res) => {
+        axios.get(`${API_BASE}/departments/available`).then((res) => {
             setDepartments(res.data);
         });
     }, []);
@@ -46,8 +46,9 @@ function AddEmployee() {
             await axios.post(`${API_BASE}/employee`, employee);
             alert("Employee added successfully! Hire date recorded automatically.");
             navigate("/home");
-        } catch {
-            alert("Failed to add employee. Check all fields and try again.");
+        } catch (err) {
+            const msg = err.response?.data?.message || "Failed to add employee. Check all fields and try again.";
+            alert(msg);
         } finally {
             setSaving(false);
         }
@@ -60,7 +61,7 @@ function AddEmployee() {
     });
 
     return (
-        <Layout title="Add Employee" subtitle="New hires are automatically tagged with today's date">
+        <Layout title="Add Employee" subtitle="Only departments with open slots are shown">
             <div className="card add-form-card">
                 <form onSubmit={saveEmployee}>
                     <div className="form-grid">
@@ -144,7 +145,7 @@ function AddEmployee() {
                         </div>
 
                         <div className="form-group" style={{ gridColumn: "1 / -1" }}>
-                            <label>Department</label>
+                            <label>Department (available slots only)</label>
                             <select
                                 name="departmentId"
                                 className="form-select"
@@ -154,10 +155,15 @@ function AddEmployee() {
                                 <option value="">Select Department</option>
                                 {departments.map((dept) => (
                                     <option key={dept.dept_id} value={dept.dept_id}>
-                                        {dept.departmentName}
+                                        {dept.departmentName} ({dept.slots ?? 0} slot{(dept.slots ?? 0) !== 1 ? "s" : ""} left)
                                     </option>
                                 ))}
                             </select>
+                            {departments.length === 0 && (
+                                <p className="hire-date-note" style={{ marginTop: "0.5rem" }}>
+                                    No departments with available slots. Add slots from the Departments page.
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -166,7 +172,7 @@ function AddEmployee() {
                     </p>
 
                     <div className="btn-group" style={{ marginTop: "1.25rem" }}>
-                        <button type="submit" className="btn btn-primary" disabled={saving}>
+                        <button type="submit" className="btn btn-primary" disabled={saving || departments.length === 0}>
                             {saving ? "Saving..." : "Save Employee"}
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={() => navigate("/home")}>

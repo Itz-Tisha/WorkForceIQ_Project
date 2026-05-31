@@ -1,6 +1,5 @@
 package com.example.WorkforceIQ.Controller;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,7 @@ public class AIAnalysisController {
     private DepartmentAnalysisService service;
 
     @GetMapping("/departments")
-    public List<Map<String, String>> analyze() {
-
+    public Map<String, Object> analyze() {
         return service.analyzeDepartments();
     }
 }

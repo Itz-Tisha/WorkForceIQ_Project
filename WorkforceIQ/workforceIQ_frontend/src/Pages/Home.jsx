@@ -30,6 +30,7 @@ function Home() {
     const [endDate, setEndDate] = useState(defaults.endDate);
     const [hiringStats, setHiringStats] = useState(null);
     const [salaryGap, setSalaryGap] = useState(null);
+    const [departments, setDepartments] = useState([]);
     const [loadingHiring, setLoadingHiring] = useState(false);
     const [loadingSalary, setLoadingSalary] = useState(false);
 
@@ -38,19 +39,22 @@ function Home() {
         setLoadingSalary(true);
 
         try {
-            const [hiringRes, salaryRes] = await Promise.all([
+            const [hiringRes, salaryRes, deptRes] = await Promise.all([
                 axios.get(`${API_BASE}/analytics/hiring`, {
                     params: { startDate: start, endDate: end },
                 }),
                 axios.get(`${API_BASE}/analytics/salary-gap`, {
                     params: { startDate: start, endDate: end },
                 }),
+                axios.get(`${API_BASE}/departments`),
             ]);
             setHiringStats(hiringRes.data);
             setSalaryGap(salaryRes.data);
+            setDepartments(deptRes.data);
         } catch {
             setHiringStats(null);
             setSalaryGap(null);
+            setDepartments([]);
         } finally {
             setLoadingHiring(false);
             setLoadingSalary(false);
@@ -133,6 +137,26 @@ function Home() {
                         <div className="stat-card stat-female">
                             <div className="stat-label">Female</div>
                             <div className="stat-value">{hiringStats.workforceFemale ?? 0}</div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {departments.length > 0 && (
+                <div style={{ marginBottom: "1.5rem" }}>
+                    <h2 className="section-title">Department Slots</h2>
+                    <div className="card">
+                        <div className="slots-grid">
+                            {departments.map((dept) => (
+                                <div
+                                    key={dept.dept_id}
+                                    className={`slot-card ${(dept.slots ?? 0) === 0 ? "slot-full" : (dept.slots ?? 0) <= 2 ? "slot-low" : ""}`}
+                                >
+                                    <span className="slot-dept-name">{dept.departmentName}</span>
+                                    <span className="slot-count">{dept.slots ?? 0}</span>
+                                    <span className="slot-label">empty slot{dept.slots !== 1 ? "s" : ""}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>

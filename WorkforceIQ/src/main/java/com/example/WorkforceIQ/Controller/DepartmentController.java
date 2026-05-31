@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.WorkforceIQ.dto.DepartmentDTO;
 import com.example.WorkforceIQ.entity.Department;
 import com.example.WorkforceIQ.Service.DepartmentService;
 
@@ -15,43 +16,39 @@ public class DepartmentController {
     @Autowired
     private DepartmentService departmentService;
 
-    // add department
     @PostMapping("/department")
-    public Department addDepartment(
-            @RequestBody Department department) {
-
-        return departmentService.addDepartment(department);
+    public DepartmentDTO addDepartment(@RequestBody Department department) {
+        Department saved = departmentService.addDepartment(department);
+        return DepartmentDTO.from(saved);
     }
 
-    // get all departments
     @GetMapping("/departments")
-    public List<Department> getDepartments() {
-
+    public List<DepartmentDTO> getDepartments() {
         return departmentService.getAllDepartments();
     }
 
-    // delete department
+    @GetMapping("/departments/available")
+    public List<DepartmentDTO> getAvailableDepartments() {
+        return departmentService.getAvailableDepartments();
+    }
+
     @DeleteMapping("/department/{id}")
     public String deleteDepartment(@PathVariable int id) {
-
         departmentService.deleteDepartment(id);
-
         return "Department Deleted";
     }
 
-    // update department
     @PutMapping("/department/{id}")
-    public Department updateDepartment(
+    public DepartmentDTO updateDepartment(
             @PathVariable int id,
             @RequestBody Department department) {
 
-        return departmentService.updateDepartment(id, department);
+        Department updated = departmentService.updateDepartment(id, department);
+        return updated != null ? DepartmentDTO.from(updated) : null;
     }
 
-    // single department
     @GetMapping("/department/{id}")
     public Department getDepartment(@PathVariable int id) {
-
         return departmentService.getDepartmentById(id);
     }
 }

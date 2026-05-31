@@ -1,5 +1,5 @@
 package com.example.WorkforceIQ.entity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,10 @@ public class Department {
 
 	    @Column(nullable = false, unique = true)
 	    private String departmentName;
+
+	    @JsonProperty("slots")
+	    @Column(nullable = false)
+	    private int slots;
 
 	    @JsonManagedReference
 	    @OneToMany(mappedBy = "department",
@@ -42,6 +46,14 @@ public class Department {
 
 	    public void setDepartmentName(String departmentName) {
 	        this.departmentName = departmentName;
+	    }
+
+	    public int getSlots() {
+	        return slots;
+	    }
+
+	    public void setSlots(int slots) {
+	        this.slots = slots;
 	    }
 
 	    public List<Employee> getEmployees() {

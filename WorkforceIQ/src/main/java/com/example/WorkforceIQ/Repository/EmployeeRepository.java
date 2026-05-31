@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.example.WorkforceIQ.entity.Department;
 import com.example.WorkforceIQ.entity.Employee;
 
 public interface EmployeeRepository
@@ -18,4 +19,9 @@ public interface EmployeeRepository
     List<Employee> findByHireDateBetween(
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT AVG(e.salary) FROM Employee e")
+    Double getCompanyAvgSalary();
+
+    List<Employee> findByDepartment(Department department);
 }

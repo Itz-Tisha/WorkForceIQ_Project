@@ -1,0 +1,21 @@
+package com.example.WorkforceIQ.Repository;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.example.WorkforceIQ.entity.Employee;
+
+public interface EmployeeRepository
+        extends JpaRepository<Employee, Long> {
+
+    Employee findByEmailAndPassword(String email, String password);
+
+    @Query("SELECT e FROM Employee e WHERE e.hireDate BETWEEN :startDate AND :endDate")
+    List<Employee> findByHireDateBetween(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
+}

@@ -11,7 +11,6 @@ function AddEmployee() {
     const [employee, setEmployee] = useState({
         name: "",
         email: "",
-        password: "",
         gender: "",
         salary: "",
         role: "",
@@ -89,17 +88,7 @@ function AddEmployee() {
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label>Password</label>
-                            <input
-                                type="password"
-                                name="password"
-                                className="form-input"
-                                placeholder="Password"
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
+                      
 
                         <div className="form-group">
                             <label>Gender</label>

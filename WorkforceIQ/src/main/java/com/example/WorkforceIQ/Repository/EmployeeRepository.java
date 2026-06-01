@@ -2,6 +2,7 @@ package com.example.WorkforceIQ.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,5 @@ public interface EmployeeRepository
     Double getCompanyAvgSalary();
 
     List<Employee> findByDepartment(Department department);
+    Optional<Employee> findByEmail(String email);
 }

@@ -11,8 +11,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.WorkforceIQ.entity.Department;
 import com.example.WorkforceIQ.entity.Employee;
+import com.example.WorkforceIQ.entity.RemovedEmployee;
 import com.example.WorkforceIQ.Repository.DepartmentRepository;
 import com.example.WorkforceIQ.Repository.EmployeeRepository;
+import com.example.WorkforceIQ.Repository.RemovedEmployeeRepository;
 import com.example.WorkforceIQ.dto.EmployeeRequest;
 
 @Service
@@ -23,6 +25,9 @@ public class EmployeeService {
 
     @Autowired
     private DepartmentRepository departmentRepo;
+    
+    @Autowired
+    private RemovedEmployeeRepository removedEmployeeRepo;
 
     public Employee login(String email, String password) {
         return repo.findByEmailAndPassword(email, password);
@@ -103,16 +108,44 @@ public class EmployeeService {
     public void deleteEmployee(Long id) {
 
         Employee emp = repo.findById(id).orElse(null);
+
         if (emp == null) {
             return;
         }
 
+        // Save into RemovedEmployee table
+        RemovedEmployee removed = new RemovedEmployee();
+
+        removed.setName(emp.getName());
+        removed.setEmail(emp.getEmail());
+        removed.setGender(emp.getGender());
+        removed.setSalary(emp.getSalary());
+        removed.setRole(emp.getRole());
+        removed.setHireDate(emp.getHireDate());
+        removed.setYearsOfExperience(emp.getYearsOfExperience());
+        removed.setExperienceLastIncrementYear(
+                emp.getExperienceLastIncrementYear()
+        );
+
+        if (emp.getDepartment() != null) {
+            removed.setDepartmentName(
+                    emp.getDepartment().getDepartmentName()
+            );
+        }
+
+        removed.setRemovedDate(LocalDate.now());
+
+        removedEmployeeRepo.save(removed);
+
+       
         Department dept = emp.getDepartment();
+
         if (dept != null) {
             dept.setSlots(dept.getSlots() + 1);
             departmentRepo.save(dept);
         }
 
+      
         repo.deleteById(id);
     }
 
@@ -123,5 +156,9 @@ public class EmployeeService {
 
     public List<Employee> getAllEmployees() {
         return repo.findAll();
+    }
+    
+    public long getMonthlyRemovedEmployees() {
+        return removedEmployeeRepo.countRemovedEmployeesThisMonth();
     }
 }

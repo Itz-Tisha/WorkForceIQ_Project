@@ -33,13 +33,14 @@ function Home() {
     const [departments, setDepartments] = useState([]);
     const [loadingHiring, setLoadingHiring] = useState(false);
     const [loadingSalary, setLoadingSalary] = useState(false);
+	const [monthlyFired, setMonthlyFired] = useState(0);
 
     const fetchAnalytics = async (start, end) => {
         setLoadingHiring(true);
         setLoadingSalary(true);
 
         try {
-            const [hiringRes, salaryRes, deptRes] = await Promise.all([
+            const [hiringRes, salaryRes, deptRes,firedRes] = await Promise.all([
                 axios.get(`${API_BASE}/analytics/hiring`, {
                     params: { startDate: start, endDate: end },
                 }),
@@ -47,10 +48,13 @@ function Home() {
                     params: { startDate: start, endDate: end },
                 }),
                 axios.get(`${API_BASE}/departments`),
+				axios.get(`${API_BASE}/employee/monthly-fired`)
+				
             ]);
             setHiringStats(hiringRes.data);
             setSalaryGap(salaryRes.data);
             setDepartments(deptRes.data);
+			setMonthlyFired(firedRes.data.totalFired);
         } catch {
             setHiringStats(null);
             setSalaryGap(null);
@@ -97,7 +101,7 @@ function Home() {
                     <p>Department-level workforce analysis</p>
                 </div>
             </div>
-
+			
             <div className="filter-bar">
                 <div className="form-group">
                     <label>Start Date</label>
@@ -121,7 +125,12 @@ function Home() {
                     Apply Filter
                 </button>
             </div>
-
+			
+			<div className="stat-card stat-danger">
+			    <div className="stat-label">Fired This Month</div>
+			    <div className="stat-value">{monthlyFired}</div>
+			</div>
+			
             {!loadingHiring && hiringStats && (
                 <div style={{ marginBottom: "1.5rem" }}>
                     <h2 className="section-title">Workforce Gender</h2>
@@ -161,7 +170,7 @@ function Home() {
                     </div>
                 </div>
             )}
-
+			
             <div className="grid-2">
                 <div>
                     <h2 className="section-title">Hiring Overview</h2>

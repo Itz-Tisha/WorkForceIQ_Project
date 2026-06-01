@@ -1,6 +1,8 @@
 package com.example.WorkforceIQ.Controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +60,17 @@ public class EmployeeController {
     @GetMapping
     public java.util.List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
+    }
+    
+    @GetMapping("/monthly-fired")
+    public Map<String, Object> getMonthlyFiredEmployees() {
+
+        long total = employeeService.getMonthlyRemovedEmployees();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("totalFired", total);
+
+        return response;
     }
 
   

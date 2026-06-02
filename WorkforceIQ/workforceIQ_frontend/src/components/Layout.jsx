@@ -10,6 +10,7 @@ function Layout({ children, title, subtitle }) {
         { path: "/department", label: "Departments" },
         { path: "/addemployee", label: "Add Employee" },
         { path: "/ai-analysis", label: "AI Insights" },
+		
     ];
 
     const isLogin = location.pathname === "/";

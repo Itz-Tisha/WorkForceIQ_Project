@@ -26,4 +26,8 @@ public interface EmployeeRepository
 
     List<Employee> findByDepartment(Department department);
     Optional<Employee> findByEmail(String email);
+    List<Employee> findByYearsOfExperienceGreaterThanEqual(int years);
+    
+    @Query("SELECT AVG(e.salary) FROM Employee e WHERE e.department.Dept_id = :deptId")
+    double getDepartmentAverageSalary(@Param("deptId") int deptId);
 }

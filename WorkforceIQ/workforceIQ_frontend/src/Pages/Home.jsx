@@ -100,6 +100,18 @@ function Home() {
                     <h3>AI Insights</h3>
                     <p>Department-level workforce analysis</p>
                 </div>
+				<div
+				    className="action-card"
+				    onClick={() => navigate("/promotion")}
+				>
+				    <div className="action-icon">📈</div>
+
+				    <h3>Promotions</h3>
+
+				    <p>
+				        Promote eligible employees
+				    </p>
+				</div>
             </div>
 			
             <div className="filter-bar">

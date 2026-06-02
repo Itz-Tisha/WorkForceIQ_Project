@@ -7,6 +7,7 @@ import Department from "./Pages/Department";
 import DepartmentEmployees from "./Pages/DepartmentEmployees";
 import UpdateEmployee from "./Pages/UpdateEmployee";
 import AIAnalysis from "./Pages/AIAnalysis";
+import PromotionPage from "./Pages/PromotionPage";
 
 function App() {
 
@@ -34,7 +35,9 @@ function App() {
 		    path="/ai-analysis"
 		    element={<AIAnalysis />}
 		/>
+		<Route path="/promotion" element={<PromotionPage />} />
       </Routes>
+	  
 
     </BrowserRouter>
 

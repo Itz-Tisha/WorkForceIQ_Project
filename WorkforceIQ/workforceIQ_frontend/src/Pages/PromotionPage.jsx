@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
+import RoleSelect from "../components/RoleSelect";
 import { API_BASE } from "../api/config";
 
 function PromotionPage() {
@@ -149,9 +150,8 @@ function PromotionPage() {
 
                         <div className="form-group">
                             <label>New Role</label>
-
-                            <input
-                                className="form-input"
+                            <RoleSelect
+                                name="newRole"
                                 value={form.newRole}
                                 onChange={(e) =>
                                     setForm({
@@ -159,6 +159,7 @@ function PromotionPage() {
                                         newRole: e.target.value,
                                     })
                                 }
+                                placeholder="Select new role"
                             />
                         </div>
 

@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import { API_BASE } from "../api/config";
+import { isHr } from "../auth/auth";
 
 function DepartmentEmployees() {
 
     const navigate = useNavigate();
     const { id } = useParams();
+    const hrUser = isHr();
     const [department, setDepartment] = useState(null);
 
     useEffect(() => {
@@ -64,14 +66,16 @@ function DepartmentEmployees() {
                                 {emp.hireDate && <span>Hired: {emp.hireDate}</span>}
                             </div>
                         </div>
-                        <div className="btn-group">
-                            <button className="btn btn-secondary btn-sm" onClick={() => navigate(`/update/${emp.id}`)}>
-                                Edit
-                            </button>
-                            <button className="btn btn-danger btn-sm" onClick={() => deleteEmployee(emp.id)}>
-                                Delete
-                            </button>
-                        </div>
+                        {hrUser && (
+                            <div className="btn-group">
+                                <button className="btn btn-secondary btn-sm" onClick={() => navigate(`/update/${emp.id}`)}>
+                                    Edit
+                                </button>
+                                <button className="btn btn-danger btn-sm" onClick={() => deleteEmployee(emp.id)}>
+                                    Delete
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ))
             )}

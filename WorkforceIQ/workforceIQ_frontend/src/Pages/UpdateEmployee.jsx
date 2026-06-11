@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Layout from "../components/Layout";
+import RoleSelect from "../components/RoleSelect";
 import { API_BASE } from "../api/config";
 
 function UpdateEmployee() {
@@ -34,7 +35,7 @@ function UpdateEmployee() {
         setEmployee({
             name: response.data.name,
             email: response.data.email,
-            password: response.data.password,
+            password: "",
             gender: response.data.gender,
             salary: response.data.salary,
             role: response.data.role,
@@ -83,8 +84,15 @@ function UpdateEmployee() {
                             <input type="email" name="email" className="form-input" value={employee.email} onChange={handleChange} required />
                         </div>
                         <div className="form-group">
-                            <label>Password</label>
-                            <input type="password" name="password" className="form-input" value={employee.password} onChange={handleChange} required />
+                            <label>New Password (optional)</label>
+                            <input
+                                type="password"
+                                name="password"
+                                className="form-input"
+                                value={employee.password}
+                                onChange={handleChange}
+                                placeholder="Leave blank to keep current password"
+                            />
                         </div>
                         <div className="form-group">
                             <label>Gender</label>
@@ -111,10 +119,12 @@ function UpdateEmployee() {
                         </div>
                         <div className="form-group">
                             <label>Role</label>
-                            <select name="role" className="form-select" value={employee.role} onChange={handleChange} required>
-                                <option value="HR">HR</option>
-                                <option value="EMPLOYEE">Employee</option>
-                            </select>
+                            <RoleSelect
+                                name="role"
+                                value={employee.role}
+                                onChange={handleChange}
+                                placeholder="Select Role"
+                            />
                         </div>
                         <div className="form-group" style={{ gridColumn: "1 / -1" }}>
                             <label>Department</label>

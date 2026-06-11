@@ -5,11 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.WorkforceIQ.entity.Employee;
 import com.example.WorkforceIQ.Service.EmployeeService;
 import com.example.WorkforceIQ.dto.EmployeeRequest;
+import com.example.WorkforceIQ.dto.LoginResponse;
+import com.example.WorkforceIQ.security.JwtService;
+import com.example.WorkforceIQ.util.Roles;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5174")
@@ -19,12 +24,24 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    @Autowired
+    private JwtService jwtService;
+
     @GetMapping("/login")
-    public Employee login(
+    public ResponseEntity<LoginResponse> login(
             @RequestParam String email,
             @RequestParam String password) {
 
-        return employeeService.login(email, password);
+        Employee employee = employeeService.login(email, password);
+        if (employee == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(jwtService.buildLoginResponse(employee));
+    }
+
+    @GetMapping("/roles")
+    public java.util.List<String> getRoles() {
+        return Roles.ALL;
     }
     @PostMapping
     public Employee addEmployee(

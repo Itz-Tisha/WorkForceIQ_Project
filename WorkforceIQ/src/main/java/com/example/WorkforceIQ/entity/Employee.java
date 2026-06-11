@@ -1,6 +1,7 @@
 package com.example.WorkforceIQ.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -28,7 +29,7 @@ public class Employee {
     private double salary;
 
     @Column(nullable = true)
-    private String role; // HR or EMPLOYEE
+    private String role;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = true)
@@ -72,6 +73,7 @@ public class Employee {
         this.email = email;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

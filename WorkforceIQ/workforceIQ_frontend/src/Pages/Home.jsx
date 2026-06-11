@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import { API_BASE } from "../api/config";
+import { isHr } from "../auth/auth";
 
 function formatLocalDate(date) {
     const y = date.getFullYear();
@@ -24,6 +25,7 @@ function getDefaultDates() {
 function Home() {
 
     const navigate = useNavigate();
+    const hrUser = isHr();
     const defaults = getDefaultDates();
 
     const [startDate, setStartDate] = useState(defaults.startDate);
@@ -90,28 +92,28 @@ function Home() {
                     <h3>Departments</h3>
                     <p>Manage departments and view employees</p>
                 </div>
-                <div className="action-card" onClick={() => navigate("/addemployee")}>
-                    <div className="action-icon">👤</div>
-                    <h3>Add Employee</h3>
-                    <p>Register new hires with auto hire date</p>
-                </div>
+                {hrUser && (
+                    <div className="action-card" onClick={() => navigate("/addemployee")}>
+                        <div className="action-icon">👤</div>
+                        <h3>Add Employee</h3>
+                        <p>Register new hires with auto hire date</p>
+                    </div>
+                )}
                 <div className="action-card" onClick={() => navigate("/ai-analysis")}>
                     <div className="action-icon">🤖</div>
                     <h3>AI Insights</h3>
                     <p>Department-level workforce analysis</p>
                 </div>
-				<div
-				    className="action-card"
-				    onClick={() => navigate("/promotion")}
-				>
-				    <div className="action-icon">📈</div>
-
-				    <h3>Promotions</h3>
-
-				    <p>
-				        Promote eligible employees
-				    </p>
-				</div>
+                {hrUser && (
+                    <div
+                        className="action-card"
+                        onClick={() => navigate("/promotion")}
+                    >
+                        <div className="action-icon">📈</div>
+                        <h3>Promotions</h3>
+                        <p>Promote eligible employees</p>
+                    </div>
+                )}
             </div>
 			
             <div className="filter-bar">

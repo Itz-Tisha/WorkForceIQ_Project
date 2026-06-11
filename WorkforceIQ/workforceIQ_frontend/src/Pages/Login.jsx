@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import { API_BASE } from "../api/config";
+import { saveSession } from "../auth/auth";
 
 function Login() {
 
@@ -22,13 +23,18 @@ function Login() {
                 { params: { email, password } }
             );
 
-            if (response.data) {
+            if (response.data?.token) {
+                saveSession(response.data);
                 navigate("/home");
             } else {
                 alert("Invalid Email or Password");
             }
-        } catch {
-            alert("Server Error — make sure the backend is running on port 8086");
+        } catch (err) {
+            if (err.response?.status === 401) {
+                alert("Invalid Email or Password");
+            } else {
+                alert("Server Error — make sure the backend is running on port 8086");
+            }
         } finally {
             setLoading(false);
         }

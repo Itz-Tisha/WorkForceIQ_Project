@@ -166,7 +166,9 @@ public class EmployeeService {
 
         emp.setName(request.getName());
         emp.setEmail(request.getEmail());
-        emp.setPassword(request.getPassword());
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            emp.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
         emp.setGender(request.getGender());
         emp.setSalary(request.getSalary());
         emp.setRole(request.getRole());

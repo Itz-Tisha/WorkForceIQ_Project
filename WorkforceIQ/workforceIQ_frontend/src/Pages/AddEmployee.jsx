@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
+import RoleSelect from "../components/RoleSelect";
 import { API_BASE } from "../api/config";
 
 function AddEmployee() {
@@ -126,11 +127,11 @@ function AddEmployee() {
 
                         <div className="form-group">
                             <label>Role</label>
-                            <select name="role" className="form-select" onChange={handleChange} required>
-                                <option value="">Select Role</option>
-                                <option value="HR">HR</option>
-                                <option value="EMPLOYEE">Employee</option>
-                            </select>
+                            <RoleSelect
+                                name="role"
+                                value={employee.role}
+                                onChange={handleChange}
+                            />
                         </div>
 
                         <div className="form-group" style={{ gridColumn: "1 / -1" }}>
